@@ -34,7 +34,7 @@ strong::after {
    ---------------------------------------------------------------- */
 
 strong:hover {
-    color: white; /* El texto traducido será blanco */
+    color: black; /* El texto traducido será blanco */
 }
 
 strong:hover::before,
