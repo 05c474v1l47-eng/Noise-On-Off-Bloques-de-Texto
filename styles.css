@@ -18,14 +18,14 @@ strong::after {
     content: attr(data-original-text);
     
     position: absolute;
-    top: 1;
+    top: 5;
     left: -1;
-    width: 100%;
+    width: -100%;
     overflow: hidden;
     
     /* ******** AQUÍ VA TU CÓDIGO DE ANIMACIÓN GLITCH ******* */
     /* Por ejemplo: */
-    animation: glitch-anim 2s infinite linear alternate-reverse;
+    animation: glitch-anim 10s infinite linear alternate-reverse;
     /* ... el resto de tu código de glitch (clip, colors, etc.) ... */
 }
 
