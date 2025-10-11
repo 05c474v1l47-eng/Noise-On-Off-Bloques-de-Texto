@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (translation) {
                 // Muestra la traducción (JavaScript)
                 keyword.textContent = translation; 
-            }
+          
             
             ------------------------------------------------------
             // Reproduce el sonido
