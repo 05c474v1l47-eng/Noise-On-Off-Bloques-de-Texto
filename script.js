@@ -44,26 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 keyword.textContent = translation; 
             }
             
-            // Reproduce el sonido
-            if (audio) {
-                audio.currentTime = 0; 
-                audio.play().catch(e => {});
-            }
-        });
-
-        // Evento: Al quitar el cursor (MOUSEOUT)
-        keyword.addEventListener('mouseout', () => {
-            // Restaura el texto original
-            keyword.textContent = originalText;
-            
-            // Pausa el sonido
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-        });
-    });
-});
             ------------------------------------------------------
             // Reproduce el sonido
             if (audio) {
