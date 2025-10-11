@@ -18,8 +18,8 @@ strong::after {
     content: attr(data-original-text);
     
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 1;
+    left: -1;
     width: 100%;
     overflow: hidden;
     
