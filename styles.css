@@ -18,15 +18,19 @@ strong::after {
     content: attr(data-original-text);
     
     position: absolute;
-    top: 5;
-    left: -1;
-    width: -100%;
+    top: 0;
+    left: 0;
+    width: 100%;
     overflow: hidden;
-    
+
+
+    /* ESTOS SON SOLO EJEMPLOS, DEBES TENER TUS VALORES AQUÍ */
+    color: red; /* Color de las capas glitch */
+    clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); 
+    animation: glitch-anim 2s infinite linear alternate-reverse;
     /* ******** AQUÍ VA TU CÓDIGO DE ANIMACIÓN GLITCH ******* */
     /* Por ejemplo: */
-    animation: glitch-anim 10s infinite linear alternate-reverse;
-    /* ... el resto de tu código de glitch (clip, colors, etc.) ... */
+   
 }
 
 /* ----------------------------------------------------------------
