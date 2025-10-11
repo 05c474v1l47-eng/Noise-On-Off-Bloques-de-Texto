@@ -1,87 +1,36 @@
-/* ESTILOS GENERALES Y RETRO */
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: 'Consolas', 'Courier New', monospace; /* Añadida fuente Consolas/Courier */
-    padding: 20px;
-    line-height: 1.6;
-}
+/* ----------------------------------------------------------------
+   CÓDIGO CSS PARA PERMITIR LA TRADUCCIÓN AL HACER HOVER
+   ---------------------------------------------------------------- */
 
-h1 {
-    color: #00ff00; /* Títulos en verde para un toque terminal */
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-}
-
-#glitch-container {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-/* ESTILOS BASE DE LA PALABRA INTERACTIVA */
+/* Reglas CSS para el estado normal (mostrar la palabra clave) */
 strong {
-    color: #ff0000; /* Rojo base */
-    cursor: crosshair;
+    color: red; /* Color de las palabras clave */
+    /* ... otros estilos base que no rompen el hover ... */
     position: relative;
-    display: inline-block;
-    user-select: none;
-    transition: color 0.1s; /* Transición suave para el color base */
+    /* (Asegúrate de que el CSS del glitch NO fuerce el contenido aquí) */
 }
 
-/* ESTILOS CLAVE DEL GLITCH */
-.glitch {
-    /* **CORRECCIÓN CLAVE:** Oculta el texto principal del <strong> para que solo se vean las capas ::before/::after */
-    color: transparent; 
+/* Reglas CSS para aplicar el efecto GLITCH SÓLO cuando NO se está en hover */
+strong:not(:hover)::before,
+strong:not(:hover)::after {
+    /* Aquí va el código que aplica el efecto de glitch a los pseudoelementos. */
+    
+    /* El contenido de los pseudoelementos DEBE ser el texto original 
+       para que el glitch se vea. Esto es solo un ejemplo: */
+    content: attr(data-original-text); /* O el texto que quieras */
+    
+    /* ... El resto del código de glitch (clip, animation, etc.) ... */
 }
 
-.glitch::before,
-.glitch::after {
-    /* El contenido glitcheado es la traducción que puso JS */
-    content: attr(data-translation); 
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    /* Las capas flotantes son de color rojo */
-    color: #ff0000; 
+/* Reglas para el estado HOVER (muestra la traducción, sin glitch de pseudoelementos) */
+strong:hover {
+    color: white; /* O el color que quieras para la traducción */
+    text-decoration: none;
+    cursor: pointer;
 }
 
-/* Capa CIAN (ligeramente desplazada) */
-.glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 #00ffff; /* Sombra en cian */
-    animation: glitch-anim-1 2s infinite linear alternate-reverse;
-}
-
-/* Capa MAGENTA (ligeramente desplazada) */
-.glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 #ff00ff; /* Sombra en magenta */
-    animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-
-/* DEFINICIÓN DE ANIMACIONES con clip-path (Efecto de franjas que parpadean) */
-@keyframes glitch-anim-1 {
-    0% { clip-path: inset(86% 0 1% 0); }
-    15% { clip-path: inset(18% 0 63% 0); }
-    30% { clip-path: inset(15% 0 35% 0); }
-    45% { clip-path: inset(30% 0 25% 0); }
-    60% { clip-path: inset(80% 0 10% 0); }
-    75% { clip-path: inset(10% 0 80% 0); }
-    90% { clip-path: inset(5% 0 5% 0); }
-    100% { clip-path: inset(86% 0 1% 0); }
-}
-
-@keyframes glitch-anim-2 {
-    0% { clip-path: inset(25% 0 50% 0); }
-    10% { clip-path: inset(35% 0 20% 0); }
-    20% { clip-path: inset(80% 0 5% 0); }
-    40% { clip-path: inset(10% 0 80% 0); }
-    60% { clip-path: inset(90% 0 1% 0); }
-    80% { clip-path: inset(40% 0 40% 0); }
-    100% { clip-path: inset(25% 0 50% 0); }
+/* IMPORTANTE: Ocultar los pseudoelementos en hover para que no interfieran */
+strong:hover::before,
+strong:hover::after {
+    content: none !important; /* Asegura que se borre cualquier contenido forzado */
 }
