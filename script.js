@@ -1,4 +1,3 @@
-
 // Este script maneja la interacción (hover) para la traducción y el sonido.
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,36 +7,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('glitch-audio');
 
     keywords.forEach(keyword => {
-        // Guardar el texto original de la palabra
+        // Guardar el texto original (el cifrado)
         const originalText = keyword.textContent;
         // Obtener la traducción desde el atributo 'data-translation'
         const translation = keyword.getAttribute('data-translation');
         
-        // OPCIONAL: Debugging para confirmar que lee el valor
-        // console.log(`Original: ${originalText}, Traducción: ${translation}`);
+        // *** CRÍTICO: Guardar el texto original en un atributo para que el CSS lo use en el glitch ***
+        keyword.setAttribute('data-original-text', originalText);
+        // ******************************************************************************************
 
         // ** Evento: Al pasar el cursor sobre la palabra (MOUSEOVER) **
         keyword.addEventListener('mouseover', () => {
             if (translation) {
-                // CORRECCIÓN: Usar la traducción si existe
+                // A. Muestra la traducción (cambiando el texto de la etiqueta principal)
                 keyword.textContent = translation; 
             }
-       
-          
             
-            // Reproduce el sonido
+            // B. Reproduce el sonido
             if (audio) {
                 audio.currentTime = 0; 
-                audio.play().catch(e => {});
+                audio.play().catch(e => {}); // Maneja si el navegador bloquea el autoplay
             }
         });
 
-        // Evento: Al quitar el cursor (MOUSEOUT)
+        // ** Evento: Al quitar el cursor (MOUSEOUT) **
         keyword.addEventListener('mouseout', () => {
-            // Restaura el texto original
+            // A. Restaura el texto original (cifrado)
             keyword.textContent = originalText;
             
-            // Pausa el sonido
+            // B. Pausa el sonido
             if (audio) {
                 audio.pause();
                 audio.currentTime = 0;
