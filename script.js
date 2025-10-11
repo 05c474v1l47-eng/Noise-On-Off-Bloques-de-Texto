@@ -1,52 +1,53 @@
+// Este script maneja la interacción (hover) para la traducción y el sonido.
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Obtener todas las palabras marcadas con <strong>
-    const glitchWords = document.querySelectorAll('strong');
-    
-    // 2. Crear el objeto de audio 
-    // Asegúrate de tener el archivo 'noise.mp3' en la misma carpeta.
-    const noiseAudio = new Audio('noise.mp3'); 
-    noiseAudio.loop = true; // El audio se repite
-    
-    // **NOTA IMPORTANTE SOBRE EL AUDIO:** // Los navegadores modernos bloquean la reproducción automática.
-    // El usuario debe interactuar con la página (hacer un primer clic)
-    // para que el audio funcione.
+    // 1. Seleccionar todas las palabras clave (etiquetas <strong>)
+    const keywords = document.querySelectorAll('#glitch-container strong');
+    // 2. Seleccionar el elemento de audio
+    const audio = document.getElementById('glitch-audio');
 
-    glitchWords.forEach(word => {
+    keywords.forEach(keyword => {
+        // Guardar el texto original de la palabra antes de modificarlo
+        const originalText = keyword.textContent;
+        // Obtener la traducción desde el atributo 'data-translation'
+        const translation = keyword.getAttribute('data-translation');
         
-        // 3. Guardar el texto original (la palabra sin glitch)
-        const originalText = word.textContent;
-
-        // Evento al entrar el ratón (mouseover)
-        word.addEventListener('mouseover', () => {
+        // ** Evento: Al pasar el cursor sobre la palabra (MOUSEOVER) **
+        keyword.addEventListener('mouseover', () => {
+            // Reemplazar el texto con la traducción
+            keyword.textContent = translation;
             
-            // A. Activa el efecto visual (añade la clase CSS)
-            word.classList.add('glitch');
-            
-            // B. Muestra el texto de la traducción como texto principal
-            // El CSS (en la clase .glitch) hará que este texto sea invisible, pero es necesario
-            // para que los pseudo-elementos ::before/::after puedan tomar su valor (content: attr(data-translation);)
-            word.textContent = word.getAttribute('data-translation'); 
-            
-            // C. Intenta reproducir el audio
-            noiseAudio.currentTime = 0;
-            noiseAudio.play().catch(e => {
-                // Este mensaje aparecerá si el navegador bloquea el audio
-                console.warn("La reproducción de audio fue bloqueada. Haz un primer clic en la página para activarla.");
-            });
+            // Reproducir el sonido
+            if (audio) {
+                // Reiniciar el audio al principio por si ya estaba sonando
+                audio.currentTime = 0; 
+                audio.play().catch(e => {
+                    // La promesa falla si el navegador bloquea el auto-play
+                    // console.error("Error al reproducir el audio:", e);
+                });
+            }
         });
 
-        // Evento al salir el ratón (mouseout)
-        word.addEventListener('mouseout', () => {
+        // ** Evento: Al quitar el cursor de la palabra (MOUSEOUT) **
+        keyword.addEventListener('mouseout', () => {
+            // Restaurar el texto original
+            keyword.textContent = originalText;
             
-            // A. Desactiva el efecto visual
-            word.classList.remove('glitch');
-            
-            // B. Restaura el texto original (el ilegible)
-            word.textContent = originalText;
-            
-            // C. Detiene el audio
-            noiseAudio.pause();
+            // Pausar el sonido
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0; // Opcional: reiniciar para el próximo hover
+            }
         });
+        
+        // ** (Opcional) Guardar el texto original como un atributo por si acaso **
+        // Esto ayuda a mantener el estado en caso de que el CSS esté alterando textContent
+        keyword.setAttribute('data-original-text', originalText);
     });
+    
+    // NOTA SOBRE EL AUDIO:
+    // Los navegadores modernos a menudo bloquean la reproducción de audio 
+    // si no hay una interacción previa del usuario con la página (clic).
+    // Si el audio no funciona, es posible que debas añadir un botón 
+    // de "Iniciar Experimento" que lo active inicialmente.
 });
