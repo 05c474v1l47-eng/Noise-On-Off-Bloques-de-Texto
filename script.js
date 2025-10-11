@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // B. Pausar el sonido
             if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
+                audio.play();
+                audio.currentTime = 1;
             }
         });
     });
