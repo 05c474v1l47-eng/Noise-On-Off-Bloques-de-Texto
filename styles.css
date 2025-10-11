@@ -5,7 +5,11 @@ strong {
     color: red; /* Color de las palabras clave */
     position: relative;
     cursor: pointer;
-    /* ... otros estilos base ... */
+    
+    /* ******** CRÍTICO: Oculta el texto principal ******* */
+    /* Lo movemos fuera de la vista para que SOLO se vean las capas glitch */
+    text-indent: -9999px;
+    white-space: nowrap; 
 }
 
 /* ----------------------------------------------------------------
@@ -14,7 +18,7 @@ strong {
 
 strong::before,
 strong::after {
-    /* *** CLAVE: Usar el nuevo atributo que configuramos en JS *** */
+    /* *** CLAVE: Usar el atributo 'data-original-text' que genera el JS *** */
     content: attr(data-original-text);
     
     position: absolute;
@@ -23,14 +27,11 @@ strong::after {
     width: 100%;
     overflow: hidden;
 
-
-    /* ESTOS SON SOLO EJEMPLOS, DEBES TENER TUS VALORES AQUÍ */
-    color: red; /* Color de las capas glitch */
-    clip-path: polygon(0 1, 100% 0, 100% 30%, 0 30%); 
-    animation: glitch-anim 20s infinite linear alternate-reverse;
-    /* ******** AQUÍ VA TU CÓDIGO DE ANIMACIÓN GLITCH ******* */
-    /* Por ejemplo: */
-   
+    /* ******** REGLAS DE APARIENCIA Y ANIMACIÓN GLITCH ******* */
+    color: red; 
+    clip-path: polygon(0 1%, 100% 0, 100% 30%, 0 30%); /* Ejemplo de distorsión */
+    animation: glitch-anim 20s infinite linear alternate-reverse; /* Tu animación */
+    /* -------------------------------------------------------- */
 }
 
 /* ----------------------------------------------------------------
@@ -38,12 +39,17 @@ strong::after {
    ---------------------------------------------------------------- */
 
 strong:hover {
-    color: pink; /* El texto traducido será blanco */
+    color: pink; /* Color de la traducción */
+    
+    /* ******** CRÍTICO: Mostrar el texto principal ******* */
+    /* Revela la capa principal, que ahora contiene la traducción (gracias a JS) */
+    text-indent: 0; 
+    white-space: normal;
 }
 
 strong:hover::before,
 strong:hover::after {
-    /* *** CLAVE: Desactivar los pseudo-elementos al hacer hover *** */
-    /* Esto permite que el texto cambiado por JavaScript sea visible. */
+    /* *** CRÍTICO: Desactivar los pseudo-elementos al hacer hover *** */
+    /* Esto es CLAVE para que el glitch desaparezca y el texto traducido se vea. */
     content: none !important;
 }
