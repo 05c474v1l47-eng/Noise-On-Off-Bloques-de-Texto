@@ -26,8 +26,8 @@ strong::after {
 
     /* ESTOS SON SOLO EJEMPLOS, DEBES TENER TUS VALORES AQUÍ */
     color: red; /* Color de las capas glitch */
-    clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%); 
-    animation: glitch-anim 2s infinite linear alternate-reverse;
+    clip-path: polygon(0 1, 100% 0, 100% 30%, 0 30%); 
+    animation: glitch-anim 20s infinite linear alternate-reverse;
     /* ******** AQUÍ VA TU CÓDIGO DE ANIMACIÓN GLITCH ******* */
     /* Por ejemplo: */
    
@@ -38,7 +38,7 @@ strong::after {
    ---------------------------------------------------------------- */
 
 strong:hover {
-    color: black; /* El texto traducido será blanco */
+    color: pink; /* El texto traducido será blanco */
 }
 
 strong:hover::before,
