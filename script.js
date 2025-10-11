@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // B. Reproducir el sonido
             if (audio) {
                 // Reiniciar el audio al principio para que suene cada vez
-                audio.currentTime = 0; 
+                audio.currentTime = 1; 
                 
                 // Intenta reproducir. El catch maneja si el navegador lo bloquea.
                 audio.play().catch(e => {
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // B. Pausar el sonido
             if (audio) {
                 audio.play();
-                audio.currentTime = 1;
+                audio.currentTime = 0;
             }
         });
     });
