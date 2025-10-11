@@ -1,45 +1,38 @@
 // Este script maneja la interacción (hover) para la traducción y el sonido.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Seleccionar todas las palabras clave (etiquetas <strong>)
-    const keywords = document.querySelectorAll('#glitch-container strong');
-    // 2. Seleccionar el elemento de audio
-    const audio = document.getElementById('glitch-audio');
+    // 1. Obtener todas las palabras marcadas con <strong>
+    const glitchWords = document.querySelectorAll('strong');
+    
+    // 2. Crear el objeto de audio (solo una instancia)
+    const noiseAudio = new Audio('noise.mp3'); 
+    // noiseAudio.loop = true; // No lo necesitamos si lo reproducimos en cada hover
+    
+    glitchWords.forEach(word => {
+        // 3. Guardar el texto original (el ilegible)
+        const originalText = word.textContent;
 
-    keywords.forEach(keyword => {
-        // Guardar el texto original (el cifrado)
-        const originalText = keyword.textContent;
-        // Obtener la traducción desde el atributo 'data-translation'
-        const translation = keyword.getAttribute('data-translation');
-        
-        // *** CRÍTICO: Guardar el texto original en un atributo para que el CSS lo use en el glitch ***
-        keyword.setAttribute('data-original-text', originalText);
-        // ******************************************************************************************
-
-        // ** Evento: Al pasar el cursor sobre la palabra (MOUSEOVER) **
-        keyword.addEventListener('mouseover', () => {
-            if (translation) {
-                // A. Muestra la traducción (cambiando el texto de la etiqueta principal)
-                keyword.textContent = translation; 
-            }
+        // ** Evento al entrar el ratón (mouseover) **
+        word.addEventListener('mouseover', () => {
             
-            // B. Reproduce el sonido
-            if (audio) {
-                audio.currentTime = 0; 
-                audio.play().catch(e => {}); // Maneja si el navegador bloquea el autoplay
-            }
+            // A. Muestra el texto de la traducción
+            word.textContent = word.getAttribute('data-translation'); 
+            
+            // B. Intenta reproducir el audio
+            noiseAudio.currentTime = 0;
+            noiseAudio.play().catch(e => {
+                 console.warn("La reproducción de audio fue bloqueada. Haz un primer clic en la página para activarla.");
+            });
         });
 
-        // ** Evento: Al quitar el cursor (MOUSEOUT) **
-        keyword.addEventListener('mouseout', () => {
-            // A. Restaura el texto original (cifrado)
-            keyword.textContent = originalText;
+        // ** Evento al salir el ratón (mouseout) **
+        word.addEventListener('mouseout', () => {
             
-            // B. Pausa el sonido
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
+            // A. Restaura el texto original (el ilegible)
+            word.textContent = originalText;
+            
+            // B. Detiene el audio
+            noiseAudio.pause();
         });
     });
 });
