@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para reproducir el audio del glitch
     function playGlitchSound() {
         glitchSound.currentTime = 0; // Reinicia el audio cada vez
-        glitchSound.play().catch(e => console.error("Error al reproducir el audio:", e));
+        glitchSound.play().catch(e => console.error("noise.mp3", e));
     }
 
     strongElements.forEach(strong => {
