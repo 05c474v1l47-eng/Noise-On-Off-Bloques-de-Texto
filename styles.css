@@ -7,26 +7,18 @@ body {
     font-family: 'Consolas', 'Courier New', monospace;
     padding: 20px;
     line-height: 1.6;
-    overflow-x: hidden; /* Evita barras de desplazamiento por el glitch general */
-}
-
-h1 {
-    color: #00ff00; /* Títulos en verde para un toque terminal */
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    overflow-x: hidden;
 }
 
 #glitch-container {
     max-width: 800px;
     margin: 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     position: relative;
-    /* Aplica una pequeña vibración general a todo el contenedor */
+    /* Glitch General: Aplica una pequeña vibración a todo el contenedor */
     animation: text-vibrate 0.5s infinite alternate; 
 }
 
-/* @keyframes para el glitch general (pequeño movimiento) */
+/* @keyframes para el glitch general */
 @keyframes text-vibrate {
     0% { transform: translate(0.5px, 0); }
     50% { transform: translate(-0.5px, 0.5px); }
@@ -39,15 +31,14 @@ h1 {
    ---------------------------------------------------------------- */
 
 strong {
-    color: #ff0000; /* Rojo base */
+    color: #ff0000;
     cursor: crosshair;
     position: relative;
     display: inline-block;
     user-select: none;
-    transition: color 0.1s; 
     
-    /* CRÍTICO: Oculta el texto principal para que solo se vean las capas glitch */
-    /* El texto principal (cifrado o traducido) siempre estará oculto por defecto */
+    /* ***** CRÍTICO: Oculta el texto principal ***** */
+    /* Lo mueve fuera de la vista para que SÓLO se vean las capas glitch */
     text-indent: -9999px; 
     white-space: nowrap;
 }
@@ -55,30 +46,30 @@ strong {
 /* Capas Glitch (SIEMPRE ACTIVAS) */
 strong::before,
 strong::after {
-    /* El contenido glitcheado es el texto principal del <strong>, que es CIFRADO */
-    content: attr(data-original-text); /* Asumimos que el HTML tiene data-original-text o usamos el texto del JS */
+    /* CRÍTICO: Aquí el 'content' usa el texto original que el JS no ha tocado */
+    /* La palabra cifrada debe estar en el atributo data-translation de tu HTML */
+    content: attr(data-translation);
     
-    /* --- LÓGICA DE TU CÓDIGO ORIGINAL --- */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    color: #ff0000; /* Las capas flotantes son de color rojo */
+    color: #ff0000;
 }
 
 /* Capa CIAN */
 strong::before {
     left: 2px;
-    text-shadow: -2px 0 #00ffff; /* Sombra en cian */
+    text-shadow: -2px 0 #00ffff;
     animation: glitch-anim-1 2s infinite linear alternate-reverse;
 }
 
 /* Capa MAGENTA */
 strong::after {
     left: -2px;
-    text-shadow: -2px 0 #ff00ff; /* Sombra en magenta */
+    text-shadow: -2px 0 #ff00ff;
     animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 
@@ -89,15 +80,16 @@ strong::after {
 strong:hover {
     color: #00ff00; /* Color de la traducción (Verde Terminal) */
     
-    /* CRÍTICO: Revela el texto principal (traducido por JS) */
+    /* ***** CRÍTICO: Revela el texto principal ***** */
+    /* Trae de vuelta el texto que JS acaba de traducir */
     text-indent: 0; 
     white-space: normal;
 }
 
-/* CRÍTICO: Desactivar las capas glitch al hacer hover */
+/* Desactivar las capas glitch al hacer hover */
 strong:hover::before,
 strong:hover::after {
-    content: none !important; /* Apaga las capas glitch */
+    content: none !important; 
 }
 
 /* ----------------------------------------------------------------
