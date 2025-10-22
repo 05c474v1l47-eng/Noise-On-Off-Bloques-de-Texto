@@ -48,14 +48,14 @@
         <strong data-translation="SONIDO HUECO">HOLLOW SOUND</strong>. <strong data-translation="OLOR DULCE">SWEET SCENT</strong>. 
         <strong data-translation="MANO AJENA">STRANGE HAND</strong> <strong data-translation="OJOS CERRADOS">CLOSED EYES</strong>. 
         <strong data-translation="CAMINATA LENTA">SLOW WALK</strong> <strong data-translation="PULSO RÁPIDO">RAPID PULSE</strong> 
-        <strong data-translation="ANGUSTIANTE">DISTRESSING</strong>, <strong data-translation="MISTERIOSA">MYSTERIOUS</strong>. 
+        <strong data-translation="ANGUSTIANTE">DISTRESSING</strong>, <strong data-translation="MYSTERIOUS">MYSTERIOUS</strong>. 
         <strong data-translation="ESTALLIDO A LO LEJOS">EXPLOSION IN THE DISTANCE</strong> <strong data-translation="SUSPIRO FAMILIAR">FAMILIAR SIGH</strong> 
         <strong data-translation="PERROS LADRAN">DOGS BARK</strong> <strong data-translation="NOMBRE EN ECO">NAME IN ECHO</strong> 
         <strong data-translation="OBSECIÓN">OBSESSION</strong> <strong data-translation="ESPEJO ROTO">BROKEN MIRROR</strong> 
         <strong data-translation="CANTO DE GALLOS">ROOSTER CROWING</strong> <strong data-translation="PIAR DE AVES">BIRDS CHIRPING</strong> 
         <strong data-translation="SIN TI">WITHOUT YOU</strong> <strong data-translation="FOTOGRAFÍA BORROSA">BLURRED PHOTO</strong> 
         <strong data-translation="VOZ DISTORSIONADA">DISTORTED VOICE</strong> <strong data-translation="VOCES INDISTINTAS">INDISTINCT VOICES</strong> 
-        <strong data-translation="SABOR METÁLICO">METALLIC TASTE</strong> <strong data-translation="OJOS ABIERTOS">OPEN EYES</strong> 
+        <strong data-translation="SABOR METÁLICO">METALLIC TASTE</strong> <strong data-translation="OPEN EYES">OPEN EYES</strong> 
         <strong data-translation="FRÍO REPENTINO">SUDDEN COLD</strong> <strong data-translation="SIRENAS">SIRENS</strong> 
         <strong data-translation="LUZ AZUL">BLUE LIGHT</strong> <strong data-translation="OTRA MUERTE">ANOTHER DEATH</strong> 
         <strong data-translation="PELO EN EL CEPILLO">HAIR ON THE BRUSH</strong> <strong data-translation="PULSOS">PULSES</strong> 
@@ -68,12 +68,12 @@
         <strong data-translation="CUERDA TENSA">TIGHT ROPE</strong> <strong data-translation="CAÍDA">FALL</strong> 
         <strong data-translation="IMPULSOS">IMPULSES</strong> <strong data-translation="VIGA TRUENA">BEAM THUNDERS</strong> 
         <strong data-translation="MURO TIEMBLA">WALL TREMBLES</strong> <strong data-translation="POLVO FINO">FINE DUST</strong> 
-        <strong data-translation="HILO DE RUIDO">THREAD OF NOISE</strong> <strong data-translation="RUIDO BLANCO">WHITE NOISE</strong> 
+        <strong data-translation="HILO DE RUIDO">THREAD OF NOISE</strong> <strong data-translation="WHITE NOISE">WHITE NOISE</strong> 
         <strong data-translation="TIERRA RESBALA">SLIPPING EARTH</strong> <strong data-translation="AGUA ESTANCADA">STAGNANT WATER</strong> 
         <strong data-translation="VENTANA CIEGA">BLIND WINDOW</strong> <strong data-translation="CEMENTO DURO">HARD CEMENT</strong> 
-        <strong data-translation="GIME">MOANS</strong> <strong data-translation="SUSURRA">WHISPERS</strong> 
+        <strong data-translation="GIME">MOANS</strong> <strong data-translation="WHISPERS">SUSURRA</strong> 
         <strong data-translation="RASGAR PAPEL">TEARING PAPER</strong> <strong data-translation="CAMPANILLAS">CHIMES</strong>, 
-        <strong data-translation="SIRENAS">SIRENAS</strong>. <strong data-translation="GRAZNIDOS">CACKLES</strong> <strong data-translation="SUSPIRA">SIGHS</strong> 
+        <strong data-translation="SIRENAS">SIRENS</strong>. <strong data-translation="GRAZNIDOS">CACKLES</strong> <strong data-translation="SUSPIRA">SIGHS</strong> 
         <strong data-translation="EN RADIO">ON RADIO</strong> <strong data-translation="AGUJA CAE">NEEDLE FALLS</strong> 
         <strong data-translation="TRUENA">THUNDERS</strong> <strong data-translation="VERTIGINOSA">DIZZYING</strong> 
         <strong data-translation="DRAMÁTICA">DRAMATIC</strong> <strong data-translation="FLASH DE CÁMARA">CAMERA FLASH</strong> 
@@ -115,20 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     strongElements.forEach(strong => {
-        // Original text is in English (the Glitch Text)
-        const originalText = strong.textContent; 
-        // Translated text is in Spanish (the Clear Text)
-        const translatedText = strong.getAttribute('data-translation');
+        // Texto Claro (Inglés) - lo que se revela al hacer hover.
+        const englishText = strong.textContent; 
+        // Texto Glitch (Español) - lo que se ve por defecto.
+        const spanishText = strong.getAttribute('data-translation');
         
-        // Al pasar el cursor: Muestra el texto CLARO (Español) y activa el audio.
+        // 1. Mostrar el texto GLITCH (Español) por defecto al cargar la página.
+        // Esto es crucial para que el Glitch en CSS tenga el texto inicial.
+        strong.textContent = spanishText;
+
+        // 2. Al pasar el cursor: Muestra el texto CLARO (Inglés)
         strong.addEventListener('mouseenter', () => {
-            strong.textContent = translatedText;
+            strong.textContent = englishText; // ¡Se revela el INGLÉS!
             playGlitchSound(); 
         });
 
-        // Al salir del cursor: Restaura el texto GLITCH (Inglés).
+        // 3. Al salir del cursor: Restaura el texto GLITCH (Español).
         strong.addEventListener('mouseleave', () => {
-            strong.textContent = originalText; 
+            strong.textContent = spanishText; // Se vuelve al ESPAÑOL (Glitch)
         });
     });
 });
