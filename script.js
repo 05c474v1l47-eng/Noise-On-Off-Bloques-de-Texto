@@ -1,9 +1,11 @@
+// script.js
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // 1. Obtener todas las palabras marcadas con <strong>
     const glitchWords = document.querySelectorAll('strong');
     
-    // 2. Crear el objeto de audio (el JS lo crea, no necesita etiqueta en HTML)
+    // 2. Crear el objeto de audio (el JS lo crea)
     const noiseAudio = new Audio('noise.mp3'); 
 
     glitchWords.forEach(word => {
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // B. Reproduce el audio
             noiseAudio.currentTime = 0;
             noiseAudio.play().catch(e => {
-                 console.warn("La reproducción de audio fue bloqueada. Haz un primer clic en la página.");
+                 // console.warn("La reproducción de audio fue bloqueada.");
             });
         });
 
