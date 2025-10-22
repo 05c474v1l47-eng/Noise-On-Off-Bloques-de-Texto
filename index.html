@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Glitch Experiment</title>
-    <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
 
  <div id="glitch-container">
     <p>
-        ¿Por qué el código de la puerta es 1234? ¿Por qué 1,2,3 y 4? 
-        ¿Por qué esa secuencia de números? 1234. ¿Podría ser una alusión 
-        a los cuatro acordes de la canción de Desvelo? Desvelo y 
-        <strong data-translation="DESOLACIÓN, FIN">DESOLATION, END</strong> y luego se va. Pero regresa. Se va y regresa. 
-        El código es 1234. ¿Qué es eso? Es una <strong data-translation="SOLOZA">SOB</strong>. Se va y regresa. 
-        El perro en la esquina está aullando. Escucho el 
-        <strong data-translation="LADRIDO LEJANO">DISTANT BARK</strong>. Es una alucinación ¿Verdad? ¡Claro que sí! 
+     
+        <strong data-translation="DESOLACIÓN, FIN">DESOLATION, END</strong> 
+        El código es 1234. ¿Qué es eso? Es una <strong data-translation="SOLOZA">SOB</strong>. 
+        <strong data-translation="LADRIDO LEJANO">DISTANT BARK</strong>. Es una alucinación ¿Verdad? ¡Claro que sí! 
         Sólo veo el <strong data-translation="SUSURRO AMENAZANTE">THREATENING WHISPER</strong> de una nube de 
         <strong data-translation="MÚSICA CLÁSICA">CLASSICAL MUSIC</strong> que se acerca con 
         <strong data-translation="MELANCOLÍA">MELANCHOLY</strong> en su voz y 
@@ -29,8 +26,8 @@
         y no pasa nada. Luego ella agoniza. Es un grito 
         <strong data-translation="AGÓNICO">AGONIC</strong> y luego el 
         <strong data-translation="VELO NEGRO">BLACK VEIL</strong> y luego la veo 
-        <strong data-translation="CAMINANDO CON PESADEZ">WALKING HEAVILY</strong>. ¿Por qué sigue caminando con pesadez 
-        si la <strong data-translation="PUERTA CERRADA">CLOSED DOOR</strong> es la respuesta 
+        <strong data-translation="CAMINANDO CON PESADEZ">WALKING HEAVILY</strong>. 
+        <strong data-translation="PUERTA CERRADA">CLOSED DOOR</strong> es la respuesta 
         de todo esto? Escucho un 
         <strong data-translation="DESGARRO">TEAR</strong> y luego ella 
         <strong data-translation="GIME">WHINES</strong>. <strong data-translation="MÚSICA SUAVE">SOFT MUSIC</strong> para el <strong data-translation="HIELO DERRITE">MELTING ICE</strong> del 
@@ -101,5 +98,36 @@
  </div>
 
 <audio id="glitch-sound" src="noise.mp3" preload="auto"></audio>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const strongElements = document.querySelectorAll('strong');
+    const glitchSound = document.getElementById('glitch-sound');
+    
+    // Función para reproducir el audio
+    function playGlitchSound() {
+        glitchSound.currentTime = 0; 
+        glitchSound.play().catch(e => {
+            console.warn("Error al intentar reproducir el audio. Puede que el navegador lo haya bloqueado:", e);
+        });
+    }
+
+    strongElements.forEach(strong => {
+        const originalText = strong.textContent; 
+        const translatedText = strong.getAttribute('data-translation');
+        
+        // Al pasar el ratón: Muestra la traducción (Español) y activa el audio.
+        strong.addEventListener('mouseenter', () => {
+            strong.textContent = translatedText;
+            playGlitchSound(); 
+        });
+
+        // Al salir del ratón: Restaura el texto original (Inglés/Glitch).
+        strong.addEventListener('mouseleave', () => {
+            strong.textContent = originalText; 
+        });
+    });
+});
+</script>
 </body>
 </html>
