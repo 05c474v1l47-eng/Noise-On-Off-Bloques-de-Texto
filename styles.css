@@ -7,7 +7,7 @@ body {
     font-family: 'Consolas', 'Courier New', monospace;
     padding: 20px;
     line-height: 1.6;
-    overflow-x: hidden; /* Evita barras de desplazamiento por el glitch general */
+    overflow-x: hidden; 
 }
 
 h1 {
@@ -55,9 +55,13 @@ strong {
 /* Capas Glitch (SIEMPRE ACTIVAS) */
 strong::before,
 strong::after {
-    /* CRÍTICO: El 'content' usa el texto original que el JS no ha tocado */
-    /* Asegúrate de que el texto cifrado esté en el atributo data-translation de tu HTML,
-       o que el texto cifrado sea el contenido de la etiqueta <strong>. */
+    /* *** CRÍTICO CORREGIDO: Usamos attr(data-translation) para el GLITCH *** */
+    /* El texto cifrado (DESOLACIÓN) está en el contenido principal,
+       pero usaremos la traducción (VACÍO, FIN) como base para el glitch visual. */
+    /* NOTA: Si quieres que el glitch muestre el texto CIFRADO (DESOLACIÓN),
+       usa content: attr(data-content-backup); y añade ese atributo en el JS.
+       PERO para simplificar, usaremos la traducción como base visual.
+    */
     content: attr(data-translation); 
     
     position: absolute;
@@ -91,7 +95,7 @@ strong:hover {
     color: #00ff00; /* Color de la traducción (Verde Terminal) */
     
     /* ***** CRÍTICO: Revela el texto principal ***** */
-    /* Trae de vuelta el texto que JS acaba de traducir */
+    /* Trae de vuelta el texto que JS acaba de traducir (VACÍO, FIN) */
     text-indent: 0; 
     white-space: normal;
 }
