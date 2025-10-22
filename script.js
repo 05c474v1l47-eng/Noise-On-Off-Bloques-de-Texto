@@ -1,52 +1,36 @@
+<script>
 document.addEventListener('DOMContentLoaded', () => {
+    // Selecciona todos los elementos <strong> (las palabras clave)
+    const strongElements = document.querySelectorAll('strong');
+    // Selecciona el elemento de audio por su ID, que ahora carga 'noise.mp3'
+    const glitchSound = document.getElementById('glitch-sound');
     
-    // 1. Obtener todas las palabras marcadas con <strong>
-    const glitchWords = document.querySelectorAll('strong');
-    
-    // 2. Crear el objeto de audio 
-    // Asegúrate de tener el archivo 'noise.mp3' en la misma carpeta.
-    const noiseAudio = new Audio('noise.mp3'); 
-    noiseAudio.loop = true; // El audio se repite
-    
-    // **NOTA IMPORTANTE SOBRE EL AUDIO:** // Los navegadores modernos bloquean la reproducción automática.
-    // El usuario debe interactuar con la página (hacer un primer clic)
-    // para que el audio funcione.
+    // Función para reproducir el audio del glitch
+    function playGlitchSound() {
+        // Reinicia el audio a 0s para que se pueda reproducir inmediatamente en cada hover
+        glitchSound.currentTime = 0; 
+        // Intenta reproducir el sonido
+        glitchSound.play().catch(e => {
+            console.warn("Error al intentar reproducir el audio. Puede que el navegador lo haya bloqueado:", e);
+        });
+    }
 
-    glitchWords.forEach(word => {
+    strongElements.forEach(strong => {
+        // Almacena el texto original (Inglés/Glitch)
+        const originalText = strong.textContent; 
+        // Almacena la traducción (Español/Claro) del atributo data-translation
+        const translatedText = strong.getAttribute('data-translation');
         
-        // 3. Guardar el texto original (la palabra sin glitch)
-        const originalText = word.textContent;
-
-        // Evento al entrar el ratón (mouseover)
-        word.addEventListener('mouseover', () => {
-            
-            // A. Activa el efecto visual (añade la clase CSS)
-            word.classList.add('glitch');
-            
-            // B. Muestra el texto de la traducción como texto principal
-            // El CSS (en la clase .glitch) hará que este texto sea invisible, pero es necesario
-            // para que los pseudo-elementos ::before/::after puedan tomar su valor (content: attr(data-translation);)
-            word.textContent = word.getAttribute('data-translation'); 
-            
-            // C. Intenta reproducir el audio
-            noiseAudio.currentTime = 0;
-            noiseAudio.play().catch(e => {
-                // Este mensaje aparecerá si el navegador bloquea el audio
-                console.warn("La reproducción de audio fue bloqueada. Haz un primer clic en la página para activarla.");
-            });
+        // Manejar el evento HOVER (Muestra la traducción y reproduce el audio)
+        strong.addEventListener('mouseenter', () => {
+            strong.textContent = translatedText;
+            playGlitchSound(); // 🎶 Esto activa el sonido al pasar el ratón
         });
 
-        // Evento al salir el ratón (mouseout)
-        word.addEventListener('mouseout', () => {
-            
-            // A. Desactiva el efecto visual
-            word.classList.remove('glitch');
-            
-            // B. Restaura el texto original (el ilegible)
-            word.textContent = originalText;
-            
-            // C. Detiene el audio
-            noiseAudio.pause();
+        // Manejar el evento MOUSEOUT (Restaura el glitch)
+        strong.addEventListener('mouseleave', () => {
+            strong.textContent = originalText; 
         });
     });
 });
+</script>
