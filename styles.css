@@ -30,6 +30,18 @@ body {
    2. GLITCH INTERACTIVO (Las palabras <strong> están SIEMPRE glitcheadas)
    ---------------------------------------------------------------- */
 
+strong {
+    color: #ff0000;
+    cursor: crosshair;
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    
+    /* ***** CRÍTICO: Oculta el texto principal ***** */
+    /* Lo mueve fuera de la vista para que SÓLO se vean las capas glitch */
+    text-indent: -9999px; 
+    white-space: nowrap;
+}
 
 /* Capas Glitch (SIEMPRE ACTIVAS) */
 strong::before,
@@ -61,6 +73,24 @@ strong::after {
     animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 
+/* ----------------------------------------------------------------
+   3. ESTADO HOVER (Desactiva Glitch y Muestra Traducción)
+   ---------------------------------------------------------------- */
+
+strong:hover {
+    color: #00ff00; /* Color de la traducción (Verde Terminal) */
+    
+    /* ***** CRÍTICO: Revela el texto principal ***** */
+    /* Trae de vuelta el texto que JS acaba de traducir */
+    text-indent: 0; 
+    white-space: normal;
+}
+
+/* Desactivar las capas glitch al hacer hover */
+strong:hover::before,
+strong:hover::after {
+    content: none !important; 
+}
 
 /* ----------------------------------------------------------------
    4. DEFINICIÓN DE ANIMACIONES (Tu código original)
