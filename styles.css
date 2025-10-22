@@ -7,12 +7,20 @@ body {
     font-family: 'Consolas', 'Courier New', monospace;
     padding: 20px;
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Evita barras de desplazamiento por el glitch general */
+}
+
+h1 {
+    color: #00ff00; 
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
 #glitch-container {
     max-width: 800px;
     margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     position: relative;
     /* Glitch General: Aplica una pequeña vibración a todo el contenedor */
     animation: text-vibrate 0.5s infinite alternate; 
@@ -30,13 +38,27 @@ body {
    2. GLITCH INTERACTIVO (Las palabras <strong> están SIEMPRE glitcheadas)
    ---------------------------------------------------------------- */
 
+strong {
+    color: #ff0000; /* Rojo base */
+    cursor: crosshair;
+    position: relative;
+    display: inline-block;
+    user-select: none;
+    transition: color 0.1s; 
+    
+    /* ***** CRÍTICO: Oculta el texto principal ***** */
+    /* Lo movemos fuera de la vista para que SÓLO se vean las capas glitch */
+    text-indent: -9999px; 
+    white-space: nowrap;
+}
 
 /* Capas Glitch (SIEMPRE ACTIVAS) */
 strong::before,
 strong::after {
-    /* CRÍTICO: Aquí el 'content' usa el texto original que el JS no ha tocado */
-    /* La palabra cifrada debe estar en el atributo data-translation de tu HTML */
-    content: attr(data-translation);
+    /* CRÍTICO: El 'content' usa el texto original que el JS no ha tocado */
+    /* Asegúrate de que el texto cifrado esté en el atributo data-translation de tu HTML,
+       o que el texto cifrado sea el contenido de la etiqueta <strong>. */
+    content: attr(data-translation); 
     
     position: absolute;
     top: 0;
@@ -65,10 +87,23 @@ strong::after {
    3. ESTADO HOVER (Desactiva Glitch y Muestra Traducción)
    ---------------------------------------------------------------- */
 
+strong:hover {
+    color: #00ff00; /* Color de la traducción (Verde Terminal) */
+    
+    /* ***** CRÍTICO: Revela el texto principal ***** */
+    /* Trae de vuelta el texto que JS acaba de traducir */
+    text-indent: 0; 
+    white-space: normal;
+}
+
+/* Desactivar las capas glitch al hacer hover */
+strong:hover::before,
+strong:hover::after {
+    content: none !important; 
 }
 
 /* ----------------------------------------------------------------
-   4. DEFINICIÓN DE ANIMACIONES (Tu código original)
+   4. DEFINICIÓN DE ANIMACIONES
    ---------------------------------------------------------------- */
 
 @keyframes glitch-anim-1 {
