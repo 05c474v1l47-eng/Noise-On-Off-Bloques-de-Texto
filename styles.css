@@ -26,7 +26,7 @@ body {
 /* 2. Efecto HOVER: Revela la traducción (Español) */
 #glitch-container strong:hover {
     /* Hace visible el texto REAL del <strong> (La traducción, ya que el JS la pone ahí) */
-    color: #4CAF50; /* Color verde para el texto claro */
+    color: #39FF14; /* Color verde para el texto claro */
     font-weight: bold;  
     /* Al hacer hover, queremos que el texto sea visible y el glitch desaparezca */
     text-shadow: none;
