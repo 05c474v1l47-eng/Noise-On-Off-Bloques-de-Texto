@@ -1,87 +1,79 @@
-/* ESTILOS GENERALES Y RETRO */
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: 'Consolas', 'Courier New', monospace; /* AÃ±adida fuente Consolas/Courier */
-    padding: 20px;
-    line-height: 1.6;
-}
-
-h1 {
-    color: #00ff00; /* TÃ­tulos en verde para un toque terminal */
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-}
-
-#glitch-container {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-/* ESTILOS BASE DE LA PALABRA INTERACTIVA */
-strong {
-    color: #ff0000; /* Rojo base */
-    cursor: crosshair;
-    position: relative;
+/* Necesario para la posición de los elementos glitch */
+#glitch-container strong {
+    /* Oculta el texto original (el texto en inglés que es "Glitch") */
+    text-indent: -9999px; 
     display: inline-block;
+    cursor: pointer;
+    position: relative;
+    font-weight: normal; /* Asegura que el texto cifrado no se vea tan fuerte */
     user-select: none;
-    transition: color 0.1s; /* TransiciÃ³n suave para el color base */
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
-/* ESTILOS CLAVE DEL GLITCH */
-.glitch {
-    /* **CORRECCIÃ“N CLAVE:** Oculta el texto principal del <strong> para que solo se vean las capas ::before/::after */
-    color: transparent; 
+/* El texto principal (la traducción en español) se hace visible al pasar el ratón */
+#glitch-container strong:hover {
+    text-indent: 0; /* Muestra el texto de la traducción */
+    color: #4CAF50; /* Color distintivo (verde claro) para el texto traducido */
+    font-weight: bold;
 }
 
-.glitch::before,
-.glitch::after {
-    /* El contenido glitcheado es la traducciÃ³n que puso JS */
+/* ----------------------------------- */
+/* Efecto GLITCH (Capas cian y magenta)*/
+/* ----------------------------------- */
+
+/* Capa CIAN (Glitch 1) */
+#glitch-container strong:before {
+    /* El contenido es la traducción, pero se muestra con el efecto glitch */
     content: attr(data-translation); 
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    /* Las capas flotantes son de color rojo */
-    color: #ff0000; 
+    text-indent: 0; 
+    color: cyan;
+    left: -2px; 
+    animation: glitch-anim 2s infinite linear alternate-reverse;
 }
 
-/* Capa CIAN (ligeramente desplazada) */
-.glitch::before {
+/* Capa MAGENTA (Glitch 2) */
+#glitch-container strong:after {
+    content: attr(data-translation);
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-indent: 0;
+    color: magenta;
     left: 2px;
-    text-shadow: -2px 0 #00ffff; /* Sombra en cian */
-    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    animation: glitch-anim 3s infinite linear alternate;
 }
 
-/* Capa MAGENTA (ligeramente desplazada) */
-.glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 #ff00ff; /* Sombra en magenta */
-    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+/* Al pasar el ratón, las capas glitch (cian y magenta) desaparecen */
+#glitch-container strong:hover:before, 
+#glitch-container strong:hover:after {
+    content: none;
 }
 
-/* DEFINICIÃ“N DE ANIMACIONES con clip-path (Efecto de franjas que parpadean) */
-@keyframes glitch-anim-1 {
-    0% { clip-path: inset(86% 0 1% 0); }
-    15% { clip-path: inset(18% 0 63% 0); }
-    30% { clip-path: inset(15% 0 35% 0); }
-    45% { clip-path: inset(30% 0 25% 0); }
-    60% { clip-path: inset(80% 0 10% 0); }
-    75% { clip-path: inset(10% 0 80% 0); }
-    90% { clip-path: inset(5% 0 5% 0); }
-    100% { clip-path: inset(86% 0 1% 0); }
-}
-
-@keyframes glitch-anim-2 {
-    0% { clip-path: inset(25% 0 50% 0); }
-    10% { clip-path: inset(35% 0 20% 0); }
-    20% { clip-path: inset(80% 0 5% 0); }
-    40% { clip-path: inset(10% 0 80% 0); }
-    60% { clip-path: inset(90% 0 1% 0); }
-    80% { clip-path: inset(40% 0 40% 0); }
-    100% { clip-path: inset(25% 0 50% 0); }
+/* Definición de la animación de Glitch */
+@keyframes glitch-anim {
+    0% {
+        clip: rect(32px, 350px, 4px, 0);
+    }
+    10% {
+        clip: rect(50px, 350px, 12px, 0);
+    }
+    20% {
+        clip: rect(78px, 350px, 15px, 0);
+    }
+    40% {
+        clip: rect(5px, 350px, 30px, 0);
+    }
+    60% {
+        clip: rect(60px, 350px, 10px, 0);
+    }
+    80% {
+        clip: rect(25px, 350px, 5px, 0);
+    }
+    100% {
+        clip: rect(2px, 350px, 40px, 0);
+    }
 }
