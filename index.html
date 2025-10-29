@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const strongElements = document.querySelectorAll('strong');
     const glitchSound = document.getElementById('glitch-sound');
     
+    // Función para reproducir el sonido (usada en el hover/touch)
     function playGlitchSound() {
         glitchSound.currentTime = 0; 
         glitchSound.play().catch(e => {
@@ -114,28 +115,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // *** PASO CLAVE PARA MÓVIL: Desbloqueo de Audio ***
+    const unlockAudio = () => {
+        // Intenta reproducir y pausar inmediatamente el audio al primer click/touch
+        glitchSound.play().then(() => {
+            glitchSound.pause();
+            // Si funciona, se eliminan los listeners de desbloqueo
+            document.body.removeEventListener('click', unlockAudio);
+            document.body.removeEventListener('touchstart', unlockAudio);
+        }).catch(e => {
+            // Si falla, el listener se mantiene.
+            console.log("Audio aún bloqueado, esperando interacción...", e);
+        });
+    };
+
+    // Añade listeners al body. El primer clic/toque en cualquier parte desbloquea el audio.
+    document.body.addEventListener('click', unlockAudio);
+    document.body.addEventListener('touchstart', unlockAudio);
+
+    // *** Lógica de Glitch (Touch y Hover) ***
     strongElements.forEach(strong => {
-        // Texto Claro (Inglés) - lo que se revela al hacer hover.
+        // Texto Claro (Inglés) - lo que se revela al hacer hover/touch.
         const englishText = strong.textContent; 
         // Texto Glitch (Español) - lo que se ve por defecto.
         const spanishText = strong.getAttribute('data-translation');
         
-        // 1. Mostrar el texto GLITCH (Español) por defecto al cargar la página.
-        // Esto es crucial para que el Glitch en CSS tenga el texto inicial.
+        // Inicialización: Muestra el texto GLITCH (Español) por defecto al cargar la página.
         strong.textContent = spanishText;
 
-        // 2. Al pasar el cursor: Muestra el texto CLARO (Inglés)
+        // 2. Evento para ESCRITORIO (MouseEnter)
         strong.addEventListener('mouseenter', () => {
-            strong.textContent = englishText; // ¡Se revela el INGLÉS!
+            strong.textContent = englishText; // Revela INGLÉS
             playGlitchSound(); 
         });
-
-        // 3. Al salir del cursor: Restaura el texto GLITCH (Español).
-        strong.addEventListener('mouseleave', () => {
-            strong.textContent = spanishText; // Se vuelve al ESPAÑOL (Glitch)
+        
+        // 2. Evento para MÓVIL (TouchStart)
+        strong.addEventListener('touchstart', (e) => {
+             e.preventDefault(); // Previene problemas de scroll
+             strong.textContent = englishText; // Revela INGLÉS
+             playGlitchSound(); 
         });
+        
+
+        // 3. Al salir del cursor (MouseLeave - Escritorio): Restaura el Español (Glitch).
+        strong.addEventListener('mouseleave', () => {
+            strong.textContent = spanishText; 
+        });
+        
+        // Nota: El TouchEnd/TouchCancel se podría usar en móvil si se necesitara restaurar
+        // el texto al levantar el dedo, pero para este efecto, el TouchStart es suficiente
+        // para cambiar el texto y reproducir el sonido.
     });
 });
 </script>
-</body>
-</html>
