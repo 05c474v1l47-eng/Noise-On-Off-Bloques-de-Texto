@@ -1,35 +1,61 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Selecciona todos los elementos <strong> (las palabras clave)
     const strongElements = document.querySelectorAll('strong');
-    // Selecciona el elemento de audio por su ID, que ahora carga 'noise.mp3'
     const glitchSound = document.getElementById('glitch-sound');
     
     // Función para reproducir el audio del glitch
     function playGlitchSound() {
-        // Reinicia el audio a 0s para que se pueda reproducir inmediatamente en cada hover
-        glitchSound.currentTime = 0; 
+        // Reinicia el audio para que se pueda reproducir en repetición rápida
+        glitchSound.currentTime = 0;
         // Intenta reproducir el sonido
         glitchSound.play().catch(e => {
-            console.warn("Error al intentar reproducir el audio. Puede que el navegador lo haya bloqueado:", e);
+            console.warn("Error tratando de reproducir el audio, quizás aún bloqueado:", e);
         });
     }
 
-    strongElements.forEach(strong => {
-        // Almacena el texto original (Inglés/Glitch)
-        const originalText = strong.textContent; 
-        // Almacena la traducción (Español/Claro) del atributo data-translation
-        const translatedText = strong.getAttribute('data-translation');
-        
-        // Manejar el evento HOVER (Muestra la traducción y reproduce el audio)
-        strong.addEventListener('mouseenter', () => {
-            strong.textContent = translatedText;
-            playGlitchSound(); // 🎶 Esto activa el sonido al pasar el ratón
+    // *** PASO CLAVE PARA MÓVIL: Desbloqueo de Audio ***
+    const unlockAudio = () => {
+        // Intenta reproducir y pausar inmediatamente el audio al primer click/touch
+        glitchSound.play().then(() => {
+            glitchSound.pause();
+            // Si funciona, se eliminan los listeners de desbloqueo
+            document.body.removeEventListener('click', unlockAudio);
+            document.body.removeEventListener('touchstart', unlockAudio);
+        }).catch(e => {
+            // Si falla, el listener se mantiene hasta la próxima interacción.
         });
+    };
 
-        // Manejar el evento MOUSEOUT (Restaura el glitch)
+    // Añade listeners al body. El primer clic/toque desbloquea el audio.
+    document.body.addEventListener('click', unlockAudio);
+    document.body.addEventListener('touchstart', unlockAudio);
+
+    // *** Lógica Principal: Cambia el texto y reproduce el sonido ***
+    strongElements.forEach(strong => {
+        // Texto Claro (Inglés) - lo que se ve por defecto en el HTML original.
+        const englishText = strong.textContent; 
+        // Texto Glitch (Español) - lo que se REVELA.
+        const spanishText = strong.getAttribute('data-translation');
+        
+        // Inicialización: Muestra el texto GLITCH (Español) por defecto al cargar la página.
+        strong.textContent = spanishText;
+
+        // 2. Evento para ESCRITORIO (MouseEnter)
+        strong.addEventListener('mouseenter', () => {
+            strong.textContent = englishText; // Revela INGLÉS
+            playGlitchSound(); // 🎶 Activa el sonido
+        });
+        
+        // 2. Evento para MÓVIL (TouchStart)
+        strong.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            strong.textContent = englishText; // Revela INGLÉS
+            playGlitchSound(); // 🎶 Activa el sonido
+        });
+        
+        // 3. Al salir del cursor (MouseLeave - Escritorio): Restaura el Español (Glitch).
         strong.addEventListener('mouseleave', () => {
-            strong.textContent = originalText; 
+            strong.textContent = spanishText; 
         });
     });
 });
