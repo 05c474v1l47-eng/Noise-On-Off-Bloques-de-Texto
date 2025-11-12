@@ -1,0 +1,88 @@
+body {
+    /* Puedes ajustar el fondo y el color del texto base aquí si lo necesitas */
+    background-color: #000; /* Fondo oscuro común para efectos glitch */
+    color: #eee; /* Texto base claro */
+    font-family: monospace;
+    padding: 20px;
+}
+
+/* Contenedor principal del texto */
+#glitch-container p {
+    line-height: 1.8; /* Mejora la legibilidad del texto cifrado */
+    text-align: justify;
+}
+
+/* 1. Elemento STRONG base: Oculta el texto real (Inglés) */
+#glitch-container strong {
+    /* Importante: Oculta el texto "real" del <strong> usando transparencia/color */
+    color: transparent; 
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    font-weight: normal; /* Para que se mezcle con el texto circundante */
+}
+
+/* 2. Efecto HOVER: Revela la traducción (Español) */
+#glitch-container strong:hover {
+    /* Hace visible el texto REAL del <strong> (La traducción, ya que el JS la pone ahí) */
+    color: #BFFF00; /* Color verde para el texto claro */
+    font-weight: bold;  
+    /* Al hacer hover, queremos que el texto sea visible y el glitch desaparezca */
+    text-shadow: none;
+}
+
+/* 3. Capas GLITCH (Pseudo-elementos :before y :after) */
+
+/* Estilo base para las capas de color que crean el efecto glitch (el texto en español) */
+#glitch-container strong:before,
+#glitch-container strong:after {
+    /* Muestra la traducción para el efecto glitch */
+    content: attr(data-translation); 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Hace que estas capas sean casi invisibles sobre el texto circundante */
+    color: inherit; 
+    text-shadow: 1px 0 0; /* Un pequeño desfase para el efecto */
+}
+
+/* Capa CIAN (Glitch 1) */
+#glitch-container strong:before {
+    color: cyan;
+    left: -1px; /* Desfase inicial */
+    /* Aquí aplicamos la animación de clip */
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+}
+
+/* Capa MAGENTA (Glitch 2) */
+#glitch-container strong:after {
+    color: magenta;
+    left: 1px; /* Desfase inicial */
+    /* Aquí aplicamos la animación de clip con un ligero desfase de tiempo */
+    animation: glitch-anim 3s infinite linear alternate;
+}
+
+/* Al pasar el ratón, las capas glitch desaparecen */
+#glitch-container strong:hover:before, 
+#glitch-container strong:hover:after {
+    content: none;
+}
+
+/* 4. Definición de la animación de Glitch */
+@keyframes glitch-anim {
+    /* Usamos valores más pequeños y constantes para simular el clip de fallo */
+    0% { clip: rect(1px, 9999px, 5px, 0); }
+    10% { clip: rect(10px, 9999px, 20px, 0); }
+    20% { clip: rect(3px, 9999px, 8px, 0); }
+    30% { clip: rect(25px, 9999px, 30px, 0); }
+    40% { clip: rect(15px, 9999px, 25px, 0); }
+    50% { clip: rect(7px, 9999px, 15px, 0); }
+    60% { clip: rect(22px, 9999px, 28px, 0); }
+    70% { clip: rect(4px, 9999px, 10px, 0); }
+    80% { clip: rect(18px, 9999px, 23px, 0); }
+    90% { clip: rect(28px, 9999px, 33px, 0); }
+    100% { clip: rect(12px, 9999px, 18px, 0); }
+}
