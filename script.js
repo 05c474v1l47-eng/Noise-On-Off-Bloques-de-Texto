@@ -3,57 +3,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const strongElements = document.querySelectorAll('strong');
     const glitchSound = document.getElementById('glitch-sound');
     
-    // Función para reproducir el audio del glitch
+    // Función para reproducir el sonido (usada en el hover/touch)
     function playGlitchSound() {
-        // Reinicia el audio para que se pueda reproducir en repetición rápida
-        glitchSound.currentTime = 0;
-        // Intenta reproducir el sonido
+        glitchSound.currentTime = 0; 
         glitchSound.play().catch(e => {
-            console.warn("Error tratando de reproducir el audio, quizás aún bloqueado:", e);
+            console.warn("Error tratando de reproducir el audio:", e);
         });
     }
 
     // *** PASO CLAVE PARA MÓVIL: Desbloqueo de Audio ***
     const unlockAudio = () => {
-        // Intenta reproducir y pausar inmediatamente el audio al primer click/touch
         glitchSound.play().then(() => {
             glitchSound.pause();
-            // Si funciona, se eliminan los listeners de desbloqueo
             document.body.removeEventListener('click', unlockAudio);
             document.body.removeEventListener('touchstart', unlockAudio);
+            console.log("Audio desbloqueado por interacción del usuario.");
         }).catch(e => {
-            // Si falla, el listener se mantiene hasta la próxima interacción.
+            console.log("Audio aún bloqueado, esperando interacción...", e);
         });
     };
 
-    // Añade listeners al body. El primer clic/toque desbloquea el audio.
     document.body.addEventListener('click', unlockAudio);
     document.body.addEventListener('touchstart', unlockAudio);
 
-    // *** Lógica Principal: Cambia el texto y reproduce el sonido ***
+    // *** Lógica de Glitch (Touch y Hover) ***
     strongElements.forEach(strong => {
-        // Texto Claro (Inglés) - lo que se ve por defecto en el HTML original.
-        const englishText = strong.textContent; 
-        // Texto Glitch (Español) - lo que se REVELA.
+        // Texto Glitch (Español) - lo que se ve por defecto.
         const spanishText = strong.getAttribute('data-translation');
         
-        // Inicialización: Muestra el texto GLITCH (Español) por defecto al cargar la página.
+        // Asumiendo que has renombrado 'textContent' a 'data-english' en el HTML
+        const englishText = strong.getAttribute('data-english'); 
+        
+        // Nuevo: Texto Alemán
+        const germanText = strong.getAttribute('data-german');
+
+        // Inicialización: Muestra el texto GLITCH (Español) por defecto.
         strong.textContent = spanishText;
+
+        // Función para elegir la traducción (50% Inglés, 50% Alemán)
+        function getRandomTranslation() {
+            // Genera un número aleatorio entre 0 y 1. Si es < 0.5, es inglés, si no, es alemán.
+            if (Math.random() < 0.5) {
+                return englishText;
+            } else {
+                return germanText;
+            }
+        }
 
         // 2. Evento para ESCRITORIO (MouseEnter)
         strong.addEventListener('mouseenter', () => {
-            strong.textContent = englishText; // Revela INGLÉS
-            playGlitchSound(); // 🎶 Activa el sonido
+            strong.textContent = getRandomTranslation(); // Revela Inglés o Alemán
+            playGlitchSound(); 
         });
         
-        // 2. Evento para MÓVIL (TouchStart)
+        // 3. Evento para MÓVIL (TouchStart)
         strong.addEventListener('touchstart', (e) => {
             e.preventDefault(); 
-            strong.textContent = englishText; // Revela INGLÉS
-            playGlitchSound(); // 🎶 Activa el sonido
+            strong.textContent = getRandomTranslation(); // Revela Inglés o Alemán
+            playGlitchSound(); 
         });
         
-        // 3. Al salir del cursor (MouseLeave - Escritorio): Restaura el Español (Glitch).
+        // 4. Al salir del cursor (MouseLeave - Escritorio): Restaura el Español (Glitch).
         strong.addEventListener('mouseleave', () => {
             strong.textContent = spanishText; 
         });
